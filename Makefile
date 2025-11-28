@@ -1,6 +1,6 @@
 help:
 clean:
-	rm -rf target *.deb *.sha256sum *.sha512sum *.rpm ~/rpmbuild rootca1/
+	rm -rf target *.deb *.sha256sum *.sha512sum *.rpm ~/rpmbuild rootca/
 build-deb: clean
 	./scripts/build-deb.sh
 build-rpm: clean
