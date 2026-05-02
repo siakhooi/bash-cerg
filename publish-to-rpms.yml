@@ -1,0 +1,10 @@
+repo: siakhooi/rpms
+branch: main
+git_commit_user: cerg
+git_commit_email: cerg@siakhooi.github.io
+git_commit_message: "cerg: Auto deploy"
+
+files:
+  - source: siakhooi-cerg-*.fc*.noarch.rpm
+    target: docs/
+    items: 1

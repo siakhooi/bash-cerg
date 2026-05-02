@@ -1,0 +1,10 @@
+repo: siakhooi/apt
+branch: main
+git_commit_user: cerg
+git_commit_email: cerg@siakhooi.github.io
+git_commit_message: "cerg: Auto deploy"
+
+files:
+  - source: siakhooi-cerg_*_amd64.deb
+    target: docs/pool/main/binary-amd64/
+    items: 1
