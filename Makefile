@@ -7,8 +7,6 @@ build-rpm: clean
 	scripts/build-rpms.sh
 set-version:
 	scripts/set-version.sh
-git-commit-and-push:
-	scripts/git-commit-and-push.sh
 create-release:
 	scripts/create-release.sh
 all-deb: clean set-version build-deb
@@ -25,3 +23,8 @@ rpm-uninstall:
 
 test-rootca:
 	cerg-generate-rootca rootca1 mystore123 '/CN=MY Organization A Root CA/C=MY/ST=KL/L=MidValley/O=MY Organization A'
+
+docker-build-rpm:
+	docker run --rm -v $(CURDIR):/workspaces docker.io/siakhooi/devcontainer:rpm44 scripts/build-rpms.sh
+docker-build-deb:
+	docker run --rm -v $(CURDIR):/workspaces docker.io/siakhooi/devcontainer:deb2604 scripts/build-deb.sh
