@@ -1,4 +1,4 @@
-# bash-cerg
+# cerg
 certificate generators for development purposes
 
 ## pre-requisites

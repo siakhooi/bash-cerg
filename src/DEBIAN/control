@@ -3,5 +3,5 @@ Version: 0.1.0
 Maintainer: Siak Hooi <siakhooi@gmail.com>
 Depends: coreutils, bash, openssl, findutils
 Architecture: amd64
-Homepage: <https://github.com/siakhooi/bash-cerg>
+Homepage: <https://github.com/siakhooi/cerg>
 Description: certificate generators for development purposes

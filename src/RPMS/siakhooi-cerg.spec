@@ -4,7 +4,7 @@ Release:        1%{?dist}
 Summary:        certificate generators for development purposes
 
 License:        MIT
-URL:            https://github.com/siakhooi/bash-cerg
+URL:            https://github.com/siakhooi/cerg
 Source0:        https://github.com/siakhooi/%{name}/archive/refs/tags/${version}.tar.gz
 BuildArch:      noarch
 
