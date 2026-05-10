@@ -1,5 +1,6 @@
 #!/bin/bash
-set -e
+
+set -euo pipefail
 
 rm -rf ~/rpmbuild
 rpmdev-setuptree

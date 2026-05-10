@@ -1,5 +1,6 @@
 #!/bin/bash
-set -e
+
+set -euo pipefail
 
 # shellcheck disable=SC1091
 . ./release.env
