@@ -1,5 +1,5 @@
 Package: siakhooi-cerg
-Version: 0.1.0
+Version: 0.2.0
 Maintainer: Siak Hooi <siakhooi@gmail.com>
 Depends: coreutils, bash, openssl, findutils
 Architecture: amd64

@@ -1,5 +1,5 @@
 Name:           siakhooi-cerg
-Version:        0.1.0
+Version:        0.2.0
 Release:        1%{?dist}
 Summary:        certificate generators for development purposes
 
@@ -24,5 +24,8 @@ certificate generators for development purposes.
 %{_bindir}/cerg-generate-rootca
 
 %changelog
+* Sun May 10 2025 Siak Hooi <siakhooi@gmail.com> - 0.2.0
+- hardening
+
 * Sun Apr 13 2025 Siak Hooi <siakhooi@gmail.com> - 0.1.0
 - initial version
