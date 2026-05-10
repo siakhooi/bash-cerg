@@ -18,6 +18,10 @@
 		}
 	},
 	"mounts": [
+		"source=/mnt/c/Users/sing/Documents/artifacts,target=/artifacts,type=bind,consistency=cached",
+		"source=/home/sing/.mygh/alamos/opt/devcontainers,target=/opt/devcontainer,type=bind,consistency=cached",
+		"source=/home/sing/.mygh/alamos/opt/config-zip,target=/opt/alamos/config-zip,type=bind,consistency=cached",
+		"source=/home/sing/.mygh/alamos/opt/bin,target=/opt/alamos/bin,type=bind,consistency=cached",
 		"source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
 	],
 	"postStartCommand": "sudo chmod 666 /var/run/docker.sock || true",

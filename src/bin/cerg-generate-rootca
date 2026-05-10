@@ -8,95 +8,95 @@ set -euo pipefail
 
 # ===== Usage =====
 usage() {
-	echo "Usage: $(basename "$0") name truststore_password subject"
-	echo " example: $(basename "$0") rootca mystore123 '/CN=MY Organization A Root CA/C=MY/ST=KL/L=MidValley/O=MY Organization A'"
+  echo "Usage: $(basename "$0") name truststore_password subject"
+  echo " example: $(basename "$0") rootca mystore123 '/CN=MY Organization A Root CA/C=MY/ST=KL/L=MidValley/O=MY Organization A'"
 }
 
 # ===== Argument Parsing =====
 parse_args() {
-	OPTIND=1
-	while getopts "h" arg; do
-		case $arg in
-		h)
-			usage
-			exit 0
-			;;
-		*)
-			usage
-			exit 1
-			;;
-		esac
-	done
-	shift $((OPTIND - 1))
+  OPTIND=1
+  while getopts "h" arg; do
+    case $arg in
+    h)
+      usage
+      exit 0
+      ;;
+    *)
+      usage
+      exit 1
+      ;;
+    esac
+  done
+  shift $((OPTIND - 1))
 
-	if [[ $# -ne 3 ]]; then
-		usage
-		exit 1
-	fi
+  if [[ $# -ne 3 ]]; then
+    usage
+    exit 1
+  fi
 
-	PARSED_NAME=$1
-	PARSED_TRUSTSTORE_PASSWORD=$2
-	PARSED_SUBJECT=$3
+  PARSED_NAME=$1
+  PARSED_TRUSTSTORE_PASSWORD=$2
+  PARSED_SUBJECT=$3
 
 }
 
 # ===== Main Logic =====
 main() {
-	parse_args "$@"
+  parse_args "$@"
 
-	readonly name=$PARSED_NAME
-	readonly truststore_password=$PARSED_TRUSTSTORE_PASSWORD
-	readonly subject=$PARSED_SUBJECT
+  readonly name=$PARSED_NAME
+  readonly truststore_password=$PARSED_TRUSTSTORE_PASSWORD
+  readonly subject=$PARSED_SUBJECT
 
-	if [[ -z "${JAVA_HOME:-}" ]]; then
-		echo "JAVA_HOME is not set. Please set it to your JDK installation path."
-		exit 1
-	fi
+  if [[ -z "${JAVA_HOME:-}" ]]; then
+    echo "JAVA_HOME is not set. Please set it to your JDK installation path."
+    exit 1
+  fi
 
-	target_path=$(realpath ./"$name")
-	mkdir -p "$target_path"
-	rm -f "$target_path"/*
+  target_path=$(realpath ./"$name")
+  mkdir -p "$target_path"
+  rm -f "$target_path"/*
 
-	readonly ROOTCA_KEY_FILE=$target_path/ca.key
-	readonly ROOTCA_CERT_FILE=$target_path/ca.crt
-	readonly ROOTCA_PEM_FILE=$target_path/ca.pem
-	readonly ROOTCA_JAVA_TRUSTSTORE=$target_path/java-cacerts.jks
-	readonly ROOTCA_TRUSTSTORE=$target_path/cacerts.jks
+  readonly ROOTCA_KEY_FILE=$target_path/ca.key
+  readonly ROOTCA_CERT_FILE=$target_path/ca.crt
+  readonly ROOTCA_PEM_FILE=$target_path/ca.pem
+  readonly ROOTCA_JAVA_TRUSTSTORE=$target_path/java-cacerts.jks
+  readonly ROOTCA_TRUSTSTORE=$target_path/cacerts.jks
 
-	(
-		set -x
+  (
+    set -x
 
-		openssl req \
-			-new \
-			-newkey rsa:4096 \
-			-days 365 \
-			-nodes \
-			-x509 \
-			-subj "$subject" \
-			-keyout "$ROOTCA_KEY_FILE" \
-			-out "$ROOTCA_CERT_FILE"
+    openssl req \
+      -new \
+      -newkey rsa:4096 \
+      -days 365 \
+      -nodes \
+      -x509 \
+      -subj "$subject" \
+      -keyout "$ROOTCA_KEY_FILE" \
+      -out "$ROOTCA_CERT_FILE"
 
-		cat "$ROOTCA_CERT_FILE" "$ROOTCA_KEY_FILE" >"$ROOTCA_PEM_FILE"
+    cat "$ROOTCA_CERT_FILE" "$ROOTCA_KEY_FILE" >"$ROOTCA_PEM_FILE"
 
-	)
+  )
 
-	# create java truststore
-	readonly JAVA_JKS_STORE=$JAVA_HOME/lib/security/cacerts
-	if [[ ! -f "$JAVA_JKS_STORE" ]]; then
-		echo "Java cacerts file not found: $JAVA_JKS_STORE"
-		exit 1
-	fi
-	cp -v "$JAVA_JKS_STORE" "$ROOTCA_JAVA_TRUSTSTORE"
-	keytool -trustcacerts -keystore "$ROOTCA_JAVA_TRUSTSTORE" -storepass changeit \
-		-noprompt -importcert -alias "$name" -file "$ROOTCA_CERT_FILE"
+  # create java truststore
+  readonly JAVA_JKS_STORE=$JAVA_HOME/lib/security/cacerts
+  if [[ ! -f "$JAVA_JKS_STORE" ]]; then
+    echo "Java cacerts file not found: $JAVA_JKS_STORE"
+    exit 1
+  fi
+  cp -v "$JAVA_JKS_STORE" "$ROOTCA_JAVA_TRUSTSTORE"
+  keytool -trustcacerts -keystore "$ROOTCA_JAVA_TRUSTSTORE" -storepass changeit \
+    -noprompt -importcert -alias "$name" -file "$ROOTCA_CERT_FILE"
 
-	keytool -import -alias "$name" -file "$ROOTCA_CERT_FILE" \
-		-keystore "$ROOTCA_TRUSTSTORE" -storepass "$truststore_password" -noprompt
+  keytool -import -alias "$name" -file "$ROOTCA_CERT_FILE" \
+    -keystore "$ROOTCA_TRUSTSTORE" -storepass "$truststore_password" -noprompt
 
-	openssl x509 -in "$ROOTCA_PEM_FILE" -text -noout >"$ROOTCA_PEM_FILE.txt"
+  openssl x509 -in "$ROOTCA_PEM_FILE" -text -noout >"$ROOTCA_PEM_FILE.txt"
 
-	find "$name"
-	cat <<_EOF_
+  find "$name"
+  cat <<_EOF_
 Run:
   sudo cp $ROOTCA_CERT_FILE /usr/local/share/ca-certificates/$name.crt
   sudo update-ca-certificates
