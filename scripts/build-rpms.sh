@@ -45,7 +45,7 @@ setup_rpmbuild_tree() {
 	rpmdev-setuptree
 }
 copy_spec_file() {
-	cp $SOURCE/RPMS/${PACKAGE_NAME}.spec ~/rpmbuild/SPECS
+	cp $SOURCE/RPMS/"${PACKAGE_NAME}".spec ~/rpmbuild/SPECS
 }
 copy_binary_files() {
 	mkdir -p $TARGET/usr/bin
@@ -56,16 +56,16 @@ copy_license_file() {
 	cp -vf ./LICENSE "$TARGET"
 }
 build_rpm_package() {
-	rpmlint ~/rpmbuild/SPECS/${PACKAGE_NAME}.spec
-	rpmbuild -bb -vv ~/rpmbuild/SPECS/${PACKAGE_NAME}.spec
-	cp -vf ~/rpmbuild/RPMS/noarch/${PACKAGE_NAME}-*.rpm .
+	rpmlint ~/rpmbuild/SPECS/"${PACKAGE_NAME}".spec
+	rpmbuild -bb -vv ~/rpmbuild/SPECS/"${PACKAGE_NAME}".spec
+	cp -vf ~/rpmbuild/RPMS/noarch/"${PACKAGE_NAME}"-*.rpm .
 }
 query_rpm_package() {
 	tree ~/rpmbuild/
-	rpm -ql ~/rpmbuild/RPMS/noarch/${PACKAGE_NAME}-*.rpm
+	rpm -ql ~/rpmbuild/RPMS/noarch/"${PACKAGE_NAME}"-*.rpm
 }
 generate_rpm_checksums() {
-	rpm_file=$(basename "$(ls ./${PACKAGE_NAME}-*.rpm)")
+	rpm_file=$(basename "$(ls ./"${PACKAGE_NAME}"-*.rpm)")
 	sha256sum "$rpm_file" >"$rpm_file.sha256sum"
 	sha512sum "$rpm_file" >"$rpm_file.sha512sum"
 }

@@ -1,4 +1,4 @@
-name: Build with Quality Check
+name: Build
 on:
   push:
     branches:

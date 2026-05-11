@@ -1,14 +1,14 @@
-name: Deployment
+name: Release
 on:
   release:
     types: [created]
 
 jobs:
   build:
-    uses: ./.github/workflows/workflow-build-with-quality-checks.yml
+    uses: ./.github/workflows/workflow-build.yml
   release-assets:
     needs: build
-    uses: ./.github/workflows/deploy-github-release-assets.yml
+    uses: ./.github/workflows/publish-to-release-assets.yml
     secrets:
       TOKEN_TO_UPLOAD_ASSETS: ${{ secrets.TOKEN_TO_UPLOAD_ASSETS }}
   siakhooi-apt:
