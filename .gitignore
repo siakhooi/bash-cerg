@@ -5,4 +5,4 @@ target
 *.rpm
 *.rpm.sha256sum
 *.rpm.sha512sum
-rootca/
+rootca*/
